@@ -1,0 +1,6 @@
+name: home-system-api
+version: '${project.version}'
+main: de.fynnhenck.homesystemapi.HomeSystemAPI
+api-version: 1.19
+load: STARTUP
+authors: [ testiyyy ]
