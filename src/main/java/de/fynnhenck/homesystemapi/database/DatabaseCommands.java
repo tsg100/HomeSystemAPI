@@ -13,7 +13,7 @@ import java.util.UUID;
 
 public class DatabaseCommands {
 
-    public boolean setHome(String username, String homeName, UUID uuid, Location loc){ //boolean determinants success; false = duplicate
+    public boolean setHome(String username, String homeName, UUID uuid, Location loc){ //boolean states success; false = duplicate
         DatabaseConnection db = new DatabaseConnection();
 
         if(isDuplicate(uuid, homeName)){

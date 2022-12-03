@@ -13,6 +13,7 @@ import java.util.UUID;
 
 public class HomeSystemDatabase {
 
+    //Accessor for other plugins
     DatabaseCommands dbc = new DatabaseCommands();
 
 
