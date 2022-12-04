@@ -1,6 +1,7 @@
 package de.fynnhenck.homesystemapi.database;
 
 import de.fynnhenck.homesystemapi.api.Home;
+import de.fynnhenck.homesystemapi.api.HomeSystemDatabase;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -72,11 +73,24 @@ public class DatabaseCommands {
         return null;
     }
 
-    public ArrayList<Home> getHomes(UUID uuid){
-
+    public void deleteAllHomes(UUID uuid){
         DatabaseConnection db = new DatabaseConnection();
-        ArrayList<Home> homes = new ArrayList<Home>();
 
+        try {
+            PreparedStatement ps = db.getConnection().prepareStatement("DELETE FROM homesystem.homes WHERE uuid=?");
+            ps.setString(1, String.valueOf(uuid));
+            db.fetchUpdate(ps);
+            db.closeConnection();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+
+
+    }
+
+    public ArrayList<Home> getHomes(UUID uuid){
+        DatabaseConnection db = new DatabaseConnection();
+        ArrayList<Home> homes = new ArrayList<>();
         try {
             PreparedStatement ps = db.getConnection().prepareStatement("SELECT * FROM `homesystem`.`homes` WHERE uuid=?");
             ps.setString(1, String.valueOf(uuid));
@@ -97,14 +111,14 @@ public class DatabaseCommands {
                 Home tempHome = new Home(id, uuid, homeName, world, x, y, z, pitch, yaw);
                 homes.add(tempHome);
             }
-            db.closeConnection();
-            return homes;
-
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
+        db.closeConnection();
+        return homes;
     }
+
+
 
     public boolean deleteHome(UUID uuid, String homeName){ //boolean describes success
         DatabaseConnection db = new DatabaseConnection();
