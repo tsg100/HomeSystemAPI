@@ -39,7 +39,7 @@ public class HomeSystemDatabase {
         return dbc.deleteHome(uuid, homeName);
     }
 
-    public void delteAllHomes(UUID uuid){
+    public void deleteAllHomes(UUID uuid){
         dbc.deleteAllHomes(uuid);
     }
 
