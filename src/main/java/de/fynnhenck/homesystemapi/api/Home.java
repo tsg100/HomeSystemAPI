@@ -31,7 +31,40 @@ public class Home {
 
     }
 
+    public int getId(){
+        return id;
+    }
 
+    public UUID getUuid(){
+        return uuid;
+    }
 
+    public String getName(){
+        return name;
+    }
+
+    public World getWorld(){
+        return world;
+    }
+
+    public long getX(){
+        return x;
+    }
+
+    public long getY(){
+        return y;
+    }
+
+    public long getZ(){
+        return z;
+    }
+
+    public float getPitch(){
+        return pitch;
+    }
+
+    public float getYaw(){
+        return yaw;
+    }
 
 }

@@ -26,13 +26,17 @@ public class HomeSystemDatabase {
 
     }
 
+    public Home getHome(UUID uuid, String homeName){
+        return dbc.getHome(uuid, homeName);
+    }
+
     public ArrayList<Home> getHomes(UUID uuid){
         return dbc.getHomes(uuid);
     }
 
     //boolean = successState
     public boolean deleteHome(UUID uuid, String homeName){
-        return dbc.delteHome(uuid, homeName);
+        return dbc.deleteHome(uuid, homeName);
     }
 
 

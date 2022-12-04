@@ -22,16 +22,15 @@ public class DatabaseCommands {
 
         try {
             //Build SQL Command
-            PreparedStatement ps = db.getConnection().prepareStatement("INSERT INTO `homesystem`.`homes`(`username`,`UUID`,`homeName`,`world`,`x`,`y`,`z`,`pitch`,`yaw`) VALUES(?,?,?,?,?,?,?,?,?)");
-            ps.setString(1, username);
-            ps.setString(2, String.valueOf(uuid));
-            ps.setString(3, homeName);
-            ps.setString(4, String.valueOf(loc.getWorld()));
-            ps.setDouble(5, loc.getX());
-            ps.setDouble(6, loc.getY());
-            ps.setDouble(7, loc.getZ());
-            ps.setFloat(8, loc.getPitch());
-            ps.setFloat(9, loc.getYaw());
+            PreparedStatement ps = db.getConnection().prepareStatement("INSERT INTO `homesystem`.`homes`(`UUID`,`homeName`,`world`,`x`,`y`,`z`,`pitch`,`yaw`) VALUES(?,?,?,?,?,?,?,?)");
+            ps.setString(1, String.valueOf(uuid));
+            ps.setString(2, homeName);
+            ps.setString(3, loc.getWorld().getName());
+            ps.setDouble(4, loc.getX());
+            ps.setDouble(5, loc.getY());
+            ps.setDouble(6, loc.getZ());
+            ps.setFloat(7, loc.getPitch());
+            ps.setFloat(8, loc.getYaw());
 
             //Write home into DB
             db.fetchUpdate(ps);
@@ -40,6 +39,37 @@ public class DatabaseCommands {
             throw new RuntimeException(e);
         }
         return true;
+    }
+
+    public Home getHome(UUID uuid, String homeName){
+        DatabaseConnection db = new DatabaseConnection();
+
+        try {
+            PreparedStatement ps = db.getConnection().prepareStatement("SELECT * FROM `homesystem`.`homes` WHERE uuid=? AND homeName=?");
+            ps.setString(1, String.valueOf(uuid));
+            ps.setString(2, homeName);
+
+            ResultSet rs = db.fetchQuery(ps);
+
+            if(rs.next()){
+
+                int id = rs.getInt("id");
+                World world = Bukkit.getWorld(rs.getString("world"));
+                long x = rs.getLong("x");
+                long y = rs.getLong("y");
+                long z = rs.getLong("z");
+                float pitch = rs.getFloat("pitch");
+                float yaw = rs.getFloat("yaw");
+
+                db.closeConnection();
+                return new Home(id, uuid, homeName, world, x, y, z, pitch, yaw);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        db.closeConnection();
+        return null;
     }
 
     public ArrayList<Home> getHomes(UUID uuid){
@@ -76,7 +106,7 @@ public class DatabaseCommands {
 
     }
 
-    public boolean delteHome(UUID uuid, String homeName){ //boolean describes success
+    public boolean deleteHome(UUID uuid, String homeName){ //boolean describes success
         DatabaseConnection db = new DatabaseConnection();
         int id = 0;
         //first get home; then delete vio primary key (id)
